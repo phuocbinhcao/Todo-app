@@ -7,8 +7,7 @@ class Footer extends Component {
 
     handleDeleteAll = () => {
         this.props.deleteAll();
-        toast.warning("Delete all success!")
-
+        toast.error("Delete all success!")
     }
 
     render() {

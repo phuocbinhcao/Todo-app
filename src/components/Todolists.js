@@ -3,23 +3,23 @@ import Main from "./body/Main";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import '../styles/todolist.scss'
+import { Data, LIMIT_TASK_IN_PAGE } from './Data';
+import Pagination from '../components/pagination/Pagination'
+
 
 class Todolists extends Component {
-  state = {
-    listTodos: [
-      { id: 1, todos: "Công việc 1",status: false },
-      { id: 2, todos: "Công việc 2",status: false },
-      { id: 3, todos: "Công việc 3",status: false },
-      { id: 4, todos: "Công việc 4",status: false },
-      { id: 5, todos: "Công việc 5",status: false },
-      { id: 6, todos: "Công việc 6",status: false },
-    ],
-    listTodoPagins: []
-  };
+  constructor(){
+    super()
+    this.state = {
+      listTodos: Data,
+      currentPage: 1,
+    };
+    this.handleSetCurrentPage=this.handleSetCurrentPage.bind(this)
+  }
 
   addNewTodo = (Todo) => {
-    this.setState({
-        listTodos: [...this.state.listTodos, Todo]
+   this.setState({
+        listTodos: [Todo,...this.state.listTodos ]
     })
   }
   deleteTodo = (Todo) => {
@@ -36,13 +36,48 @@ class Todolists extends Component {
     })
   }
 
+  onChange = (todo) => {
+    let listTodosCopy = this.state.listTodos
+     listTodosCopy = listTodosCopy.map((item) =>item.id === todo.id ? { ...item, status: !item.status } : item)
+    this.setState({
+      listTodos: listTodosCopy,
+    });
+  };
+
+  editTodos = (todo) => {
+    this.setState({
+      todos: todo
+    })
+  }
+
+  getTaskCurrentPage = () => {
+    const startIndex = this.state.currentPage*LIMIT_TASK_IN_PAGE - LIMIT_TASK_IN_PAGE;
+    return [...this.state.listTodos.slice(startIndex, startIndex+LIMIT_TASK_IN_PAGE)]
+  }
+
+  handleSetCurrentPage(page) {
+    this.setState({
+        currentPage: page
+    })
+  }
 
   render() {
     return (
       <div className="todolist">
         <h1>Todolists application</h1>
         <Header addNewTodo={this.addNewTodo}/>
-        <Main listTodos={this.state.listTodos} deleteTodo={this.deleteTodo}/>
+        <Main 
+          listTodos={this.getTaskCurrentPage()}
+          deleteTodo={this.deleteTodo} 
+          onChange={this.onChange}
+        />
+        <Pagination 
+          currentPage = {this.state.currentPage}
+          listTodos={this.state.listTodos}
+          limit={LIMIT_TASK_IN_PAGE}
+          handleSetCurrentPage={this.handleSetCurrentPage}
+        />
+
         <Footer listTodos={this.state.listTodos} deleteAll={this.deleteAll}/>
       </div>
     );
