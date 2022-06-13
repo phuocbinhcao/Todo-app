@@ -6,4 +6,4 @@ export const Data = [
       ]
 
 
-export const LIMIT_TASK_IN_PAGE = 5
+export const LIMIT_TASK_IN_PAGE = 6

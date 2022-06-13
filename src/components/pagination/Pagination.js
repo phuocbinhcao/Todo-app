@@ -6,11 +6,6 @@ class Pagination extends Component {
     super(props);
     this.props = props;
   }
-
-  //   handleSetCurrentPage = (currentPage) => {
-  //       this.props.handleSetCurrentPage(currentPage)
-  //   }
-
   render() {
     const { currentPage, limit, listTodos, handleSetCurrentPage } = this.props;
     const endPage = listTodos.length / limit;
